@@ -1417,6 +1417,7 @@ mha_varlen_fwd_kvcache(at::Tensor &q,                 // total_q x num_heads x h
                      q_padded, kcache_padded, vcache_padded, out,
                      cu_seqlens_q.data_ptr(),
                      /*cu_seqlens_k_d=*/nullptr,
+                     /*seqused_k=*/nullptr,
                      /*p_ptr=*/nullptr,
                      softmax_lse.data_ptr(),
                      /*p_dropout=*/0.f,

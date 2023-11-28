@@ -50,16 +50,16 @@ class IndexPutFirstAxis(torch.autograd.Function):
         assert values.ndim >= 2
         output = torch.zeros(first_axis_dim, *values.shape[1:], device=values.device, dtype=values.dtype)
         # TD [2022-03-04] For some reason torch.scatter is a bit faster than indexing.
-        # output[indices] = values
-        output.scatter_(0, repeat(indices, "z -> z d", d=values.shape[1]), values)
+        output[indices] = values
+        # output.scatter_(0, repeat(indices, "z -> z d", d=values.shape[1]), values)
         return output
 
     @staticmethod
     def backward(ctx, grad_output):
         (indices,) = ctx.saved_tensors
         # TD [2022-03-04] For some reason torch.gather is a bit faster than indexing.
-        # grad_values = grad_output[indices]
-        grad_values = torch.gather(grad_output, 0, repeat(indices, "z -> z d", d=grad_output.shape[1]))
+        grad_values = grad_output[indices]
+        # grad_values = torch.gather(grad_output, 0, repeat(indices, "z -> z d", d=grad_output.shape[1]))
         return grad_values, None, None
 
 
